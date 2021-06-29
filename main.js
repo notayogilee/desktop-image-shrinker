@@ -12,11 +12,21 @@ let aboutWindow;
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: 'ImageShrink',
-    width: 500,
+    width: isDev ? 800 : 500,
     height: 600,
     icon: `${__dirname}/assets/icons/Icon_256x256.png`,
-    resizable: isDev
+    resizable: isDev,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: false,
+      contextIsolation: false,
+      preload: `${__dirname}/app/js/preload`
+    }
   });
+
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
 
   // mainWindow.loadURL(`file://${__dirname}/app/index.html`)
   mainWindow.loadFile('./app/index.html');
